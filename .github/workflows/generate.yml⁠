@@ -1,0 +1,28 @@
+name: Bulk Generate B2B Pages
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Run Generator Script
+        run: node generate-100.js
+
+      - name: Commit and Push Pages
+        run: |
+          git config --global user.name "Automated Generator"
+          git config --global user.email "bot@github.com"
+          git add *.html
+          git commit -m "Cloud-generated 100 B2B text landing pages" || exit 0
+          git push
